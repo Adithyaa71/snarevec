@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>SnareVec — Configure</title>
+  <link rel="stylesheet" href="../shared/theme.css" />
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+<div class="shell">
+
+  <aside class="side">
+    <div class="brand">
+      <svg class="brandmark" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3c-4.5 0-8 3.4-8 8 0 3.4 1.9 6.1 4.6 7.4l1-2A6 6 0 0 1 12 5.2 6 6 0 0 1 14.4 16.4l1 2C18.1 17.1 20 14.4 20 11c0-4.6-3.5-8-8-8Z"/>
+        <circle cx="12" cy="11" r="2.4"/>
+      </svg>
+      <div>
+        <div class="wordmark">Snare<b>Vec</b></div>
+        <div class="tagline mono">feed your agents</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <button class="nav-item active" data-tab="profiles">Profiles</button>
+      <button class="nav-item" data-tab="backends">Embedding backends</button>
+      <button class="nav-item" data-tab="targets">Storage targets</button>
+      <button class="nav-item" data-tab="queue">Queue <span class="badge hidden" id="queueBadge"></span></button>
+      <button class="nav-item" data-tab="settings">Daemon settings</button>
+    </nav>
+
+    <div class="side-foot">
+      <div class="pill" id="statusPill"><span class="dot"></span><span id="statusText">checking…</span></div>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <!-- PROFILES -->
+    <section class="tab" id="tab-profiles">
+      <header class="tab-head">
+        <div>
+          <h1>Profiles</h1>
+          <p class="sub">A profile = backend + storage target + collection + chunking, bundled so the popup is one dropdown.
+             Chunking and model choices are <b>locked per collection</b> — mixing them corrupts search quality.</p>
+        </div>
+        <button class="btn btn-primary" id="addProfile">+ New profile</button>
+      </header>
+      <div class="cards" id="profileCards"></div>
+    </section>
+
+    <!-- BACKENDS -->
+    <section class="tab hidden" id="tab-backends">
+      <header class="tab-head">
+        <div>
+          <h1>Embedding backends</h1>
+          <p class="sub">Where vectors get computed. For byte-compatible vectors across every machine, use <span class="mono">fastembed</span> with
+             <span class="mono">nomic-embed-text-v1.5</span> — same library, same model, everywhere.</p>
+        </div>
+        <button class="btn btn-primary" id="addBackend">+ Add backend</button>
+      </header>
+      <div class="cards" id="backendCards"></div>
+    </section>
+
+    <!-- TARGETS -->
+    <section class="tab hidden" id="tab-targets">
+      <header class="tab-head">
+        <div>
+          <h1>Storage targets</h1>
+          <p class="sub">Where finished vectors go: staged JSONL on this laptop, pushed over SSH to another machine,
+             or straight into a Qdrant <b>server</b>. (Embedded/path-mode Qdrant needs the staged-file route +
+             the import script.)</p>
+        </div>
+        <button class="btn btn-primary" id="addTarget">+ Add target</button>
+      </header>
+      <div class="cards" id="targetCards"></div>
+    </section>
+
+    <!-- QUEUE -->
+    <section class="tab hidden" id="tab-queue">
+      <header class="tab-head">
+        <div>
+          <h1>Queue</h1>
+          <p class="sub">Captures that couldn't be delivered — dead backend, unreachable target — wait here. Nothing is lost.</p>
+        </div>
+        <button class="btn btn-ghost" id="refreshQueue">Refresh</button>
+      </header>
+      <div class="cards" id="queueCards"></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="tab hidden" id="tab-settings">
+      <header class="tab-head">
+        <div>
+          <h1>Daemon settings</h1>
+          <p class="sub">The extension only stores the daemon address and token. API keys and SSH credentials live in the
+             daemon's config file on your disk, never in the browser.</p>
+        </div>
+      </header>
+      <div class="card">
+        <label class="field">
+          <span class="label">Daemon URL</span>
+          <input type="text" id="daemonUrl" placeholder="http://127.0.0.1:8756" />
+        </label>
+        <label class="field">
+          <span class="label">Token <em class="dim">(printed when the daemon starts)</em></span>
+          <input type="password" id="daemonToken" placeholder="paste X-Snarevec-Token…" />
+        </label>
+        <div class="row-end">
+          <span class="test-out mono" id="settingsTestOut"></span>
+          <button class="btn" id="testConnection">Test connection</button>
+          <button class="btn btn-primary" id="saveSettings">Save</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label">Config file (on the daemon machine)</div>
+        <div class="mono dim" id="configPathHint">~/.snarevec/config.json</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="../shared/api.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

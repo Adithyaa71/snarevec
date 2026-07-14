@@ -1,0 +1,159 @@
+/* SnareVec — "abyssal vault" theme.
+   Direction: the agents live in a deep-sea vault; captures are specimens
+   sinking down to them. Deep teal-shifted dark (a visible hue, not neutral
+   black), bioluminescent teal-cyan for everything interactive, coral for the
+   claw brand + warnings. Data (paths, dims, counts, tokens) is always mono —
+   mono means "machine truth" everywhere in this UI. */
+
+:root {
+  --deep:     #0a1a22;
+  --deep-2:   #0d2029;
+  --surface:  #10242e;
+  --surface-2:#16303c;
+  --line:     #1f4152;
+  --line-soft:#183441;
+  --ink:      #dcedf2;
+  --dim:      #7fa3b0;
+  --faint:    #55788a;
+  --glow:     #35e0c8;
+  --glow-dim: #1d8f80;
+  --coral:    #ff7a5c;
+  --ok:       #4ade80;
+  --err:      #ff6b6b;
+  --warn:     #fbbf5d;
+  --r-s: 8px; --r-m: 12px; --r-l: 16px;
+  --mono: "Cascadia Code", Consolas, "SF Mono", ui-monospace, monospace;
+  --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --ease: cubic-bezier(.22,.9,.35,1);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 500px at 85% -10%, #12333d 0%, transparent 55%),
+    radial-gradient(900px 600px at -20% 110%, #0f2a35 0%, transparent 50%),
+    var(--deep);
+  font-size: 13.5px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono { font-family: var(--mono); font-size: 12px; }
+.dim  { color: var(--dim); }
+.hidden { display: none !important; }
+
+/* ------- buttons ------- */
+.btn {
+  font: 600 13px var(--sans);
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: border-color .18s var(--ease), background .18s var(--ease),
+              transform .12s var(--ease), box-shadow .25s var(--ease);
+}
+.btn:hover { border-color: var(--glow-dim); background: #1a3947; }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible, .link:focus-visible, select:focus-visible, input:focus-visible {
+  outline: 2px solid var(--glow);
+  outline-offset: 2px;
+}
+.btn-ghost { background: transparent; }
+.btn-primary {
+  background: linear-gradient(180deg, #1d8f80, #157065);
+  border-color: #2ab5a2;
+}
+.btn-primary:hover { box-shadow: 0 0 18px rgba(53,224,200,.25); background: linear-gradient(180deg,#22a695,#178275); }
+.btn-danger { border-color: #6e3230; color: #ffb4a8; background: transparent; }
+.btn-danger:hover { border-color: var(--err); background: #2a1512; }
+.btn[disabled] { opacity: .45; cursor: default; pointer-events: none; }
+
+.link {
+  background: none; border: none; padding: 4px 6px;
+  color: var(--dim); font: 500 12.5px var(--sans); cursor: pointer;
+  border-radius: 6px; transition: color .15s;
+}
+.link:hover { color: var(--glow); }
+
+/* ------- form fields ------- */
+input[type="text"], input[type="password"], input[type="number"], select, textarea {
+  width: 100%;
+  font: 500 13px var(--sans);
+  color: var(--ink);
+  background: var(--deep-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-s);
+  padding: 8px 10px;
+  transition: border-color .18s var(--ease), box-shadow .18s var(--ease);
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--glow-dim);
+  box-shadow: 0 0 0 3px rgba(53,224,200,.12);
+  outline: none;
+}
+input::placeholder { color: var(--faint); }
+.field { display: block; margin: 12px 0; }
+.label {
+  display: block;
+  font: 700 10.5px var(--sans);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 6px;
+}
+.select-wrap { position: relative; }
+.select-wrap select { appearance: none; padding-right: 30px; cursor: pointer; }
+.select-wrap .chev {
+  position: absolute; right: 11px; top: 50%; width: 11px;
+  transform: translateY(-50%);
+  fill: none; stroke: var(--dim); stroke-width: 1.8; pointer-events: none;
+}
+
+/* ------- status pill ------- */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 600 11px var(--sans);
+  padding: 4px 10px; border-radius: 99px;
+  border: 1px solid var(--line); background: var(--surface);
+  color: var(--dim); cursor: pointer;
+}
+.pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); }
+.pill-ok  { color: #a7f3c9; border-color: #1d5c3c; }
+.pill-ok .dot { background: var(--ok); animation: breathe 2.4s ease-in-out infinite; }
+.pill-err { color: #ffc4bc; border-color: #6e3230; }
+.pill-err .dot { background: var(--err); }
+@keyframes breathe { 0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,.5);} 50% { box-shadow: 0 0 0 5px rgba(74,222,128,0);} }
+
+/* ------- toast ------- */
+.toast {
+  position: fixed; left: 50%; bottom: 18px; transform: translate(-50%, 20px);
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: var(--r-m); padding: 10px 16px;
+  font: 600 12.5px var(--sans);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s var(--ease), transform .25s var(--ease);
+  z-index: 99; max-width: 90%;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.ok  { border-color: #1d5c3c; color: #a7f3c9; }
+.toast.err { border-color: #6e3230; color: #ffc4bc; }
+
+/* ------- spinner / check (test buttons) ------- */
+.spin {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid var(--line); border-top-color: var(--glow);
+  animation: rot .7s linear infinite; display: inline-block; vertical-align: -2px;
+}
+@keyframes rot { to { transform: rotate(360deg); } }
+.check-draw { stroke-dasharray: 24; stroke-dashoffset: 24; animation: draw .4s var(--ease) forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

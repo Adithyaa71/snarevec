@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="../shared/theme.css" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <main class="popup">
+
+    <header class="top">
+      <div class="brand">
+        <svg class="brandmark" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3c-4.5 0-8 3.4-8 8 0 3.4 1.9 6.1 4.6 7.4l1-2A6 6 0 0 1 12 5.2 6 6 0 0 1 14.4 16.4l1 2C18.1 17.1 20 14.4 20 11c0-4.6-3.5-8-8-8Z"/>
+          <circle cx="12" cy="11" r="2.4"/>
+        </svg>
+        <span class="wordmark">Snare<b>Vec</b></span>
+      </div>
+      <button id="statusPill" class="pill pill-wait" title="Daemon status">
+        <span class="dot"></span><span id="statusText">checking…</span>
+      </button>
+    </header>
+
+    <!-- daemon unreachable -->
+    <section id="offline" class="panel hidden">
+      <p class="offline-title">Daemon not reachable</p>
+      <p class="offline-hint">Start it on your laptop, then retry:</p>
+      <code class="mono">python daemon/main.py</code>
+      <div class="row gap">
+        <button id="retryBtn" class="btn btn-ghost">Retry</button>
+        <button id="openOptions1" class="btn btn-ghost">Open settings</button>
+      </div>
+    </section>
+
+    <!-- main capture flow -->
+    <section id="capturePanel" class="hidden">
+
+      <div class="page-card" id="pageCard">
+        <div class="page-title mono-ellipsis" id="pageTitle">Reading page…</div>
+        <div class="page-meta">
+          <span id="pageDomain" class="mono"></span>
+          <span id="pageWords" class="mono dim"></span>
+        </div>
+      </div>
+
+      <label class="field">
+        <span class="label">Profile</span>
+        <div class="select-wrap">
+          <select id="profileSelect"></select>
+          <svg viewBox="0 0 12 8" class="chev"><path d="M1 1l5 5 5-5"/></svg>
+        </div>
+        <div class="profile-sub mono" id="profileSub"></div>
+      </label>
+
+      <label class="field">
+        <span class="label">Tags <em class="dim">(Enter to add)</em></span>
+        <div class="chips" id="chips">
+          <input id="tagInput" type="text" placeholder="add a tag…" autocomplete="off" />
+        </div>
+      </label>
+
+      <button id="captureBtn" class="btn btn-capture">
+        <span class="btn-label">Capture this page</span>
+      </button>
+
+      <!-- signature: the pipeline -->
+      <div class="pipeline hidden" id="pipeline" aria-live="polite">
+        <div class="track"><div class="packet" id="packet"></div></div>
+        <div class="stages">
+          <div class="stage" data-stage="extract"><span class="node"></span><span class="stage-label">Extract</span></div>
+          <div class="stage" data-stage="chunk"><span class="node"></span><span class="stage-label">Chunk</span></div>
+          <div class="stage" data-stage="embed"><span class="node"></span><span class="stage-label">Embed</span></div>
+          <div class="stage" data-stage="store"><span class="node"></span><span class="stage-label">Store</span></div>
+        </div>
+      </div>
+
+      <div class="result hidden" id="result"></div>
+    </section>
+
+    <footer class="foot">
+      <button id="openOptions2" class="link">⚙ Configure</button>
+      <button id="queueLink" class="link">Queue <span id="queueBadge" class="badge hidden"></span></button>
+    </footer>
+  </main>
+
+  <script src="../shared/api.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

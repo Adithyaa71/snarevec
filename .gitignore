@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Never commit daemon config — it contains the auth token, API keys, SSH creds
+config.json
+*.local.json
+
+# Staged capture data
+staged/
+staged-sftp/
+queue/

@@ -1,0 +1,11 @@
+fastapi>=0.110
+uvicorn>=0.29
+httpx>=0.27
+pydantic>=2.6
+
+# Default local embedder — recommended; ~200MB with ONNX runtime
+fastembed>=0.3
+
+# Optional — only if you use these features:
+paramiko>=3.4        # SFTP/SSH storage target
+qdrant-client>=1.9   # direct Qdrant-server target
